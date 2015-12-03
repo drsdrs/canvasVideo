@@ -24,3 +24,5 @@ Push renderbutton to activate skynet.
 
 may use a little bit of your cpu, or some more...<br>
 Use at your own risk!
+
+<img src="https://www.clicktorelease.com/code/gif/1.gif">
