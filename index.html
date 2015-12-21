@@ -2,11 +2,16 @@
 <head>
   <title>Preview Canvas</title>
   <style type="text/css">
-    body { text-align: center; background: #222; }
+    body { text-align: center; background: #222; overflow: hidden; }
     img {
-      height:80%;
-      border:4px solid black;
+      max-height:99%;
+      max-width:80%;
+      height:99%;
+      border:1px solid #111;
       background: #000;
+    }
+    button {
+      float: left;
     }
   </style>
   <script type="text/javascript">
@@ -29,19 +34,20 @@
       post("gimmiDataUri", "", function(data){
         imgEl.src = data;
         imgEl.onload = function(){
-          //console.log("loaded in "+(Date.now()-date)+"ms");
-          //date = Date.now()
-          //window.requestAnimationFrame(setImgData);
-          setImgData();
+          // console.log(
+          //   "loaded in "+(Date.now()-date)+"ms  \t\t\t Framerate: "+Math.round(1000/(Date.now()-date))
+          // );
+          date = Date.now()
+          window.requestAnimationFrame(setImgData);
         }
       });
     }
 
-    //window.requestAnimationFrame(setImgData);
-    setImgData();
+    window.requestAnimationFrame(setImgData);
 }
 
 function post(url, sendData, responseCallback) {
+
   var xmlhttpRequest = new XMLHttpRequest();
   xmlhttpRequest.open("POST", url, true);
   xmlhttpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -50,6 +56,10 @@ function post(url, sendData, responseCallback) {
       responseCallback((xmlhttpRequest.responseText));
     }
   }
+  xmlhttpRequest.onerror= function(e) {
+    console.log("Error fetching " + url);
+    responseCallback("data:image/gif;base64,R0lGODlhEAAQAMQAAORHHOVSKudfOulrSOp3WOyDZu6QdvCchPGolfO0o/XBs/fNwfjZ0frl3/zy7////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAkAABAALAAAAAAQABAAAAVVICSOZGlCQAosJ6mu7fiyZeKqNKToQGDsM8hBADgUXoGAiqhSvp5QAnQKGIgUhwFUYLCVDFCrKUE1lBavAViFIDlTImbKC5Gm2hB0SlBCBMQiB0UjIQA7");
+  };
   return xmlhttpRequest.send(sendData||'');
 }
 

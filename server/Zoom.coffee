@@ -1,30 +1,24 @@
-Zoom = (canvasCtx, canvasWidth, canvasHeight)->
+Zoom = (ctx, w, h)->
   Canvas = require('canvas')
-  canvasBuffer = new Canvas(w, h)
-  ctxBuffer = canvasBuffer.getContext("2d")
+  canvasBuffer = new Canvas 0,0
 
-  ctx = canvasCtx
-  w = canvasWidth
-  h = canvasHeight
+  draw = (zoom, src, trg)->
+    if zoom
+      src = {x:0, y:0, w:w, h:h}
+      trg = {x:zoom.x/2, y:zoom.y/2, w:w-zoom.x, h:h-zoom.y}
 
-  draw = ()->
-    imageData = ctx.getImageData(0, 0, w, h)
+    imageData = ctx.getImageData src.x, src.y, src.w, src.h
 
-    data = imageData.data
-    DATA = new Uint32Array(data);
-    DATA.forEach (v,i)-> DATA[i] = v*0.9
-    imageData.data.set DATA
+    canvasBuffer.width = src.w
+    canvasBuffer.height = src.h
 
-    ctxBuffer.putImageData(imageData, 0, 0)
+    ctxBuffer = canvasBuffer.getContext("2d")
+    ctxBuffer.putImageData imageData, 0, 0
 
-    zoom.x-=zoom.x/2 if zoom.x>0
-    zoom.y-=zoom.y/2 if zoom.y>0
+    ctx.drawImage canvasBuffer, trg.x, trg.y, trg.w, trg.h
 
-    setInterval ->
-      zoom.x = zoom.y = 20
-    , 5000
 
-    ctx.drawImage(canvasBuffer, zoom.x, zoom.y, w-zoom.x*2, h-zoom.y*2)
+
 
 
 exports.Zoom = Zoom

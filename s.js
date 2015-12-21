@@ -5,9 +5,9 @@ var stdout = require('stdout-stream')
   , exec = require('child_process').exec
   , spawn = require('child_process').spawn
   , coffee = require('coffee-script').register()
-  , CanvasProcessor = require("./server/canvasProcessor.coffee").CanvasProcessor
+  , CanvasProcessor = require("./server/CanvasProcessor.coffee").CanvasProcessor
   , canvasWidth = 480
-  , canvasHeight = 320
+  , canvasHeight = 480
   , canvas = new Canvas(canvasWidth, canvasHeight)
   , ctx = canvas.getContext('2d')
   , fs = require('fs')
@@ -44,16 +44,17 @@ function startRecord(res){
     res.end = function(){ return null;}
   }
   var count = 0;
-  var limit = 3000;
+  var limit = 600;
   var canvasStream = new Canvas(canvasWidth, canvasHeight);
   var ctxStream = canvasStream.getContext('2d');
   ctxStream.patternQuality = 'best'
   var canvasProcessor = CanvasProcessor(canvasStream, canvasWidth, canvasHeight)
-  exec("rm movie.mp4 -f");
+  exec("rm ./videos/movie.mp4 -f");
   var avconv = spawn('avconv', ['-f', 'image2pipe', '-r', '25', '-i',  '-', './videos/movie.mp4']);
   console.log("startRecord");
 
   avconv.stderr.on('data', function (data) {
+    console.log(data+"");
     data = data.toString();
     if(data.includes("frame= ")){
       frames = data.split("frame= ")[1].trim().split(" ")[0]
