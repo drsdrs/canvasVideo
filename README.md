@@ -1,4 +1,6 @@
-<h1> canvasVideo </h1>
+<h1>NEW PROJECT LINK ---> https://github.com/drsdrs/canvas2Video</h1>
+
+<h2> canvasVideo </h2>
 Renders funky viz into a node-canvas, and this canvas goes to mp4 or browser for preview<br>
 linux only / mac too maybe .. not tested
 
